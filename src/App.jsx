@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "react-calendar/dist/Calendar.css";
 import "./App.css";
 import Calendarcomponent from "./components/calendar";
@@ -13,6 +13,23 @@ const App = () => {
   const [dueDate, setDueDate] = useState("");
   const [priority, setPriority] = useState("🟡 Baixa");
 
+  useEffect(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    if (savedTasks) {
+      const parsedTasks = JSON.parse(savedTasks);
+      console.log("Tarefas carregadas do localStorage:", parsedTasks);
+      setTasks(parsedTasks);
+    } else {
+      console.log("Nenhuma tarefa salva encontrada");
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log("Salvando tarefas:", tasks);
+    if (tasks.length > 0) {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+  }, [tasks]);
   const addtask = () => {
     if (newTask === "" || dueDate === "") return;
 
